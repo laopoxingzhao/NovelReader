@@ -33,9 +33,13 @@ jobs:
     - name: Build the project
       run: go build -o myapp ./cmd/myapp
 
-    - name: Upload build artifacts
-      uses: actions/upload-artifact@v2
+    - name: Upload artifact
+      uses: actions/upload-artifact@v3
       with:
-        name: myapp
-        path: myapp
+          name: my-artifact
+          path: path/to/artifact
+
+
+
+
 
