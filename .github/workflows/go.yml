@@ -31,7 +31,7 @@ jobs:
       run: go get github.com/gocolly/colly/v2
 
     - name: Build the project
-      run: go build -o myapp ./cmd/myapp
+      run: go build -o myapp ./myapp
 
     - name: Upload artifact
       uses: actions/upload-artifact@v3
