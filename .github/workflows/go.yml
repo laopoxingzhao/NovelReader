@@ -28,7 +28,7 @@ jobs:
       run: go get  github.com/dop251/goja
       
     - name: Install colly
-      run: go get -u github.com/gocolly/colly/v2
+      run: go get github.com/gocolly/colly/v2
 
     - name: Build the project
       run: go build -o myapp ./cmd/myapp
