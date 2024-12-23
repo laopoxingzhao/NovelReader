@@ -1,4 +1,4 @@
-name: Build Fyne Project
+name: Build and Test
 
 on:
   push:
@@ -10,7 +10,7 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
 
     steps:
     - name: Checkout code
@@ -19,27 +19,38 @@ jobs:
     - name: Set up Go
       uses: actions/setup-go@v2
       with:
-        go-version: '1.23' # 设置你需要的 Go 版本
+        go-version: '^1.17'
 
-    - name: Install Fyne
-      run: go get fyne.io/fyne/v2
-      
-    - name: Install goja
-      run: go get  github.com/dop251/goja
-      
-    - name: Install colly
-      run: go get github.com/gocolly/colly/v2
+    - name: Install dependencies
+      run: |
+        go get -v -d ./...
+        go get -v github.com/fyne-io/fyne/v2
+        go get -v github.com/dop251/goja
+        go get -v github.com/gocolly/colly/v2
 
     - name: Build the project
-      run: go build -o myapp ./
+      run: go build -o myapp.exe .
 
-    - name: Upload artifact
-      uses: actions/upload-artifact@v3
+    - name: Run tests
+      run: go test -v ./...
+
+    - name: Create Release
+      id: create_release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-          name: my-artifact
-          path: path/to/artifact
+        tag_name: ${{ github.ref }}
+        release_name: Release ${{ github.ref }}
+        draft: false
+        prerelease: false
 
-
-
-
-
+    - name: Upload Release Asset
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ./myapp.exe
+        asset_name: myapp.exe
+        asset_content_type: application/octet-stream
