@@ -23,7 +23,6 @@ jobs:
 
     - name: Install dependencies
       run: |
-        
         go get -v github.com/fyne-io/fyne/v2
         go get -v github.com/dop251/goja
         go get -v github.com/gocolly/colly/v2
