@@ -1,4 +1,4 @@
-module awesomeProject
+module NovelReader
 
 go 1.23
 

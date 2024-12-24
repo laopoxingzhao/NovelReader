@@ -16,6 +16,11 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v2
 
+
+    - name: Debug github.ref
+      run:
+          echo "GitHub Ref: ${{ github.ref }}"
+
     - name: Set up Go
       uses: actions/setup-go@v2
       with:
