@@ -23,7 +23,7 @@ jobs:
 
     - name: Install dependencies
       run: |
-        go get -v -d ./...
+        
         go get -v github.com/fyne-io/fyne/v2
         go get -v github.com/dop251/goja
         go get -v github.com/gocolly/colly/v2
@@ -38,7 +38,7 @@ jobs:
       id: create_release
       uses: actions/create-release@v1
       env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        GITHUB_TOKEN: ${{ secrets.token }}
       with:
         tag_name: ${{ github.ref }}
         release_name: Release ${{ github.ref }}
@@ -48,9 +48,9 @@ jobs:
     - name: Upload Release Asset
       uses: actions/upload-release-asset@v1
       env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        GITHUB_TOKEN: ${{ secrets.token }}
       with:
-        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        # upload_url: ${{ steps.create_release.outputs.upload_url }}
         asset_path: ./myapp.exe
         asset_name: myapp.exe
         asset_content_type: application/octet-stream
