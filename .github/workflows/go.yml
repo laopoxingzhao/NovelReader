@@ -50,6 +50,6 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.token }}
       with:
         # upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: ./myapp.exe
-        asset_name: myapp.exe
+        asset_path: ./NovelReader.exe
+        asset_name: NovelReader.exe
         asset_content_type: application/octet-stream
