@@ -55,11 +55,3 @@ func (p *Publisher) Publish(topic string, data any) {
 		go fun(data)
 	}
 }
-
-func main() {
-	pub := NewPublisher()
-	pub.Subscribe("test", func(data interface{}) {
-		println(data.(string))
-	})
-	pub.Publish("test", "hello world")
-}

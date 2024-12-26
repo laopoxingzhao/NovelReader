@@ -1,4 +1,4 @@
-package main
+package test
 
 import (
 	"fyne.io/fyne/v2/app"
