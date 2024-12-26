@@ -9,6 +9,16 @@ type Publisher struct {
 	subscribers sync.Map // 使用sync.Map作为订阅者存储
 }
 
+var publisher *Publisher
+
+func init() {
+	publisher = NewPublisher()
+}
+
+func GetPublisher() *Publisher {
+	return publisher
+}
+
 // NewPublisher 创建一个新的发布者实例
 func NewPublisher() *Publisher {
 	return &Publisher{
@@ -18,13 +28,14 @@ func NewPublisher() *Publisher {
 
 // Subscribe 订阅消息
 func (p *Publisher) Subscribe(sub string, fun func(any)) {
-	value, ok := p.subscribers.Load(sub)
-	if ok {
-		value = append(value.([]func(any)), fun)
+	var subs []func(any)
+	if value, ok := p.subscribers.Load(sub); ok {
+		subs = value.([]func(any))
 	} else {
-		value = []func(any){fun}
+		subs = make([]func(any), 0)
 	}
-	p.subscribers.Store(sub, value)
+	subs = append(subs, fun)
+	p.subscribers.Store(sub, subs)
 }
 
 // Unsubscribe 取消订阅
@@ -38,7 +49,8 @@ func (p *Publisher) Publish(topic string, data any) {
 	if !ok {
 		return
 	}
-	subs := value.([]func(interface{}))
+
+	subs := value.([]func(any))
 	for _, fun := range subs {
 		go fun(data)
 	}
@@ -50,5 +62,4 @@ func main() {
 		println(data.(string))
 	})
 	pub.Publish("test", "hello world")
-
 }
