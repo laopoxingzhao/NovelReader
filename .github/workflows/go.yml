@@ -14,7 +14,7 @@ on:
 jobs:
   release:
     # 运行环境
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
     steps:
       # 切换到对应 tag 源码
       - name: Checkout
