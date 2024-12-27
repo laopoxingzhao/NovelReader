@@ -9,14 +9,14 @@ type Publisher struct {
 	subscribers sync.Map // 使用sync.Map作为订阅者存储
 }
 
-var publisher *Publisher
+var Pub *Publisher
 
 func init() {
-	publisher = NewPublisher()
+	Pub = NewPublisher()
 }
 
 func GetPublisher() *Publisher {
-	return publisher
+	return Pub
 }
 
 // NewPublisher 创建一个新的发布者实例

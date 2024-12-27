@@ -1,55 +1,45 @@
-name: Build and Test
+# 工作流名称
+name: Go Release
 
+# 触发条件
 on:
   push:
-    branches:
-      - master
-  pull_request:
-    branches:
+    # 创建 tag 时
+    tags:
+      - v*
+    # 推送到 master 分支时
+    branchs:
       - master
 
 jobs:
-  build:
-    runs-on: windows-latest
-
+  release:
+    # 运行环境
+    runs-on: ubuntu-latest
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
+      # 切换到对应 tag 源码
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      # 安装 Go
+      - name: Set up Go
+        uses: actions/setup-go@v2
+        with:
+          go-version: 1.23
+      # 使用 goreleaser 编译 release
+      - name: Create release on GitHub
+        uses: goreleaser/goreleaser-action@v2
+        with:
+          # GoReleaser 版本
+          version: latest
+          # 传递给 GoReleaser 的参数
+          args: release --rm-dist
+        env:
+          # 提供访问仓库token
+          GITHUB_TOKEN: ${{secrets.TOKEN}}
 
-    - name: Set up Go
-      uses: actions/setup-go@v2
-      with:
-        go-version: '^1.17'
-
-    - name: Install dependencies
-      run: |
-        go get -v github.com/fyne-io/fyne/v2
-        go get -v github.com/dop251/goja
-        go get -v github.com/gocolly/colly/v2
-
-    - name: Build the project
-      run: go build -o myapp.exe .
-
-    - name: Run tests
-      run: go test -v ./...
-
-    - name: Create Release
-      id: create_release
-      uses: actions/create-release@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.token }}
-      with:
-        tag_name: ${{ github.ref }}
-        release_name: Release ${{ github.ref }}
-        draft: false
-        prerelease: false
-
-    - name: Upload Release Asset
-      uses: actions/upload-release-asset@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.token }}
-      with:
-        # upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: ./NovelReader.exe
-        asset_name: NovelReader.exe
-        asset_content_type: application/octet-stream
+      - name: Upload assets
+        uses: actions/upload-artifact@v4
+        with:
+         name: myapp
+         path: myfolder/dist/*
