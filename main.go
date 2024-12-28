@@ -194,7 +194,12 @@ func MakeNovelUi(win *fyne.Window, novelinfoui *model.NovelInfoUI) {
 	//center := container.NewCenter()
 	border := container.NewBorder(layout.NewSpacer(), novelinfoui.Introduce, novelinfoui.Image, nil, box)
 
-	border1 := container.NewBorder(border, nil, nil, nil, novelinfoui.List)
+	button := widget.NewButton("下载", func() {
+		getPublisher := utils.GetPublisher()
+
+		getPublisher.Publish("download", novelinfoui.DataChapter)
+	})
+	border1 := container.NewBorder(border, button, nil, nil, novelinfoui.List)
 	publisher.Subscribe("novelinfo", func(data any) {
 		(*win).Show()
 		noinfo, chapter := utils.Novelinfo(data.(string))

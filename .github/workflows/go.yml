@@ -36,10 +36,10 @@ jobs:
           args: release --rm-dist
         env:
           # 提供访问仓库token
-          GITHUB_TOKEN: ${{secrets.TOKEN}}
-
-      - name: Upload assets
-        uses: actions/upload-artifact@v4
-        with:
-         name: myapp
-         path: myfolder/dist/*
+          GITHUB_TOKEN: ${{secrets.token}}
+#
+#      - name: Upload assets
+#        uses: actions/upload-artifact@v4
+#        with:
+#         name: myapp
+#         path:
